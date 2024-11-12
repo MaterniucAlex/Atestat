@@ -1,5 +1,5 @@
-libs  := -lSDL3 -lm -SDL3_image
-files := src/main.c  
+libs  := -lSDL3 -lm -lSDL3_image
+files := src/main.c
 
 all:
 	@clear
