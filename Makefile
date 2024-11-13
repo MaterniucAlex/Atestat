@@ -1,5 +1,5 @@
 libs  := -lSDL3 -lm -lSDL3_image
-files := src/main.c
+files := src/arrayFunctions/arrayFunctions.c $(find src/algorithms/ --name '*.c') src/main.c
 
 all: linux
 
