@@ -11,6 +11,8 @@ void switchArrayItemsAndRender(int *array, int n, int i, int j);
 void  simpleSort(int *array, int n);
 void quicksort(int *arr, int n, int low, int high);
 void bubbleSort(int arr[], int n);
+void mergeSort(int arr[], int n, int left, int right);
+void insertionSort(int arr[], int size);
 
 int switchId = 0;
 int selectedID = 0;
@@ -54,14 +56,16 @@ int main()
     //update
     if (!isArraySorted(array, n))
     {
-      quicksort(array, n, 0, n-1);
+      /*quicksort(array, n, 0, n-1);*/
       /*simpleSort(array, n);*/
       /*bubbleSort(array, n);*/
+      /*mergeSort(array, n, 0, n-1);*/
+      insertionSort(array, n);
       continue;
     }
     else {
-      switchId = 0;
-      selectedID = 0;
+      switchId = -1;
+      selectedID = -1;
     }
 
     //render
@@ -194,4 +198,84 @@ void bubbleSort(int arr[], int n) {
       }
     }
   }
+}
+
+void merge(int arr[], int n, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    int leftArr[n1], rightArr[n2];
+
+    // Copy data to temporary arrays
+    for (int i = 0; i < n1; i++)
+        leftArr[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        rightArr[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    
+    // Merge the temporary arrays back into arr[]
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        selectedID = k;
+        switchArrayItemsAndRender(arr, n, k, k);
+        k++;
+    }
+
+    // Copy the remaining elements of leftArr[], if any
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        selectedID = k;
+        switchArrayItemsAndRender(arr, n, k, k);
+        i++;
+        k++;
+    }
+
+    // Copy the remaining elements of rightArr[], if any
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        selectedID = k;
+        switchArrayItemsAndRender(arr, n, k, k);
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(int arr[], int n, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        // Recursively sort the first and second halves
+        mergeSort(arr, n, left, mid);
+        mergeSort(arr, n, mid + 1, right);
+
+        // Merge the sorted halves
+        merge(arr, n, left, mid, right);
+    }
+}
+
+void insertionSort(int arr[], int size) {
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Move elements of arr[0..i-1], that are greater than key, to one position ahead
+        // of their current position
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            selectedID = j + 1;
+            switchArrayItemsAndRender(arr, size, j + 1, j + 1);
+            j = j - 1;
+        }
+
+        arr[j + 1] = key;
+        selectedID = j + 1;
+        switchArrayItemsAndRender(arr, size, j + 1, j + 1);
+    }
 }
