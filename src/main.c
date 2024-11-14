@@ -44,8 +44,8 @@ int main()
       /*quicksort(array, n, 0, n-1);*/
       /*simpleSort(array, n);*/
       /*bubbleSort(array, n);*/
-      /*mergeSort(array, n, 0, n-1);*/
-      insertionSort(array, n);
+      mergeSort(array, n, 0, n-1);
+      /*insertionSort(array, n);*/
       continue;
     }
     else selectedID = -1;

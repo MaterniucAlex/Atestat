@@ -2,6 +2,7 @@
 #define ARRAY_FUNCTIONS
 
 #include "SDL3/SDL.h"
+#include "../Main.h"
 
 void initializeArrayFunctions(SDL_Renderer *rend, int w, int h, int *sId);
 void shuffleAray(int *array, int n);
