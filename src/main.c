@@ -170,5 +170,5 @@ int getSelectedId()
 
 int isGameRunning()
 {
-  return isRunning;
+  return state == ALGO;
 }

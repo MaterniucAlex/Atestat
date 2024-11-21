@@ -8,6 +8,7 @@ void simpleSort(int *array, int n)
   {
     int min = i;
     setSelectedId(i);
+    if (!isGameRunning()) return;
     for(int j = i + 1; j < n; j++)
       if (array[j] < array[min]) min = j;
     switchArrayItemsAndRender(array, n, i, min);

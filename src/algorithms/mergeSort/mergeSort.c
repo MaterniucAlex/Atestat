@@ -25,6 +25,7 @@ void merge(int arr[], int n, int left, int mid, int right) {
       arr[k] = rightArr[j];
       j++;
     }
+  if (!isGameRunning()) return;
     setSelectedId(k);
     switchArrayItemsAndRender(arr, n, k, k);
     k++;
@@ -33,6 +34,7 @@ void merge(int arr[], int n, int left, int mid, int right) {
   // Copy the remaining elements of leftArr[], if any
   while (i < n1) {
     arr[k] = leftArr[i];
+  if (!isGameRunning()) return;
     setSelectedId(k);
     switchArrayItemsAndRender(arr, n, k, k);
     i++;
@@ -42,6 +44,7 @@ void merge(int arr[], int n, int left, int mid, int right) {
   // Copy the remaining elements of rightArr[], if any
   while (j < n2) {
     arr[k] = rightArr[j];
+  if (!isGameRunning()) return;
     setSelectedId(k);
     switchArrayItemsAndRender(arr, n, k, k);
     j++;
