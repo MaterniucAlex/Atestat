@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "arrayFunctions.h"
 #include "SDL3/SDL_render.h"
 
@@ -5,6 +6,13 @@ void shuffleAray(int *array, int n)
 {
   for(int i = 0; i < n; i++)
     array[i] = n + 1 - i;
+  for(int i = 0; i < n; i++)
+  {
+    int s = rand() % n;
+    int aux = array[i];
+    array[i] = array[s];
+    array[s] = aux;
+  }
 }
 
 void renderArray(SDL_Renderer *renderer, int *array, int n)
@@ -37,9 +45,18 @@ void switchArrayItemsAndRender(int *array, int n, int i, int j)
 {
   if (i >= n || j >= n) return;
 
+  handleEvents(array, n);
+
   int ok = array[i];
   array[i] = array[j];
   array[j] = ok;
 
   renderAndWait(array, n);
+}
+
+void forceSortArray(int *array, int n)
+{
+  for(int i = 0; i < n; i++)
+    array[i] = i;
+
 }

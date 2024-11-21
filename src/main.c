@@ -2,12 +2,13 @@
 #include "SDL3_image/SDL_image.h"
 #include "arrayFunctions/arrayFunctions.h"
 #include "algorithms/algorithms.h"
-#include <SDL3/SDL_events.h>
-#include <stdio.h>
 #include "Main.h"
 
 SDL_Renderer *renderer;
 int timer_start;
+
+SDL_Event event;
+SDL_bool isRunning = SDL_TRUE;
 
 SDL_Renderer *renderer;
 
@@ -29,9 +30,6 @@ int main()
 
   state = MAIN_MENU;
 
-  SDL_Event event;
-  SDL_bool isRunning = SDL_TRUE;
-
   int n = 50;
   int array[n];
 
@@ -42,58 +40,7 @@ int main()
   while(isRunning)
   {
     //keyboard input
-    while (SDL_PollEvent(&event))
-    {
-      switch (event.type) {
-        case SDL_EVENT_QUIT:
-          isRunning = SDL_FALSE;
-          break;
-        case SDL_EVENT_KEY_UP:
-          switch (state) {
-            case MAIN_MENU:
-              state = SELECTION;
-              break;
-            case ALGO:
-              state = SELECTION;
-              break;
-            case SELECTION:
-              switch (event.key.keysym.sym) {
-                case SDLK_1:
-                  algoNumber = 1;
-                  shuffleAray(array, n);
-                  state = ALGO;
-                  break;
-                case SDLK_2:
-                  algoNumber = 2;
-                  shuffleAray(array, n);
-                  state = ALGO;
-                  break;
-                case SDLK_3:
-                  algoNumber = 3;
-                  shuffleAray(array, n);
-                  state = ALGO;
-                  break;
-                case SDLK_4:
-                  algoNumber = 4;
-                  shuffleAray(array, n);
-                  state = ALGO;
-                  break;
-                case SDLK_5:
-                  algoNumber = 5;
-                  shuffleAray(array, n);
-                  state = ALGO;
-                  break;
-                default:
-                  break;
-              
-              }
-              break;
-          
-          }
-          break;
-      }
-    }
-    printf("%d", state);
+    handleEvents(array, n);
 
     //update
     if (state == ALGO)
@@ -153,4 +100,58 @@ void renderAndWait(int *array, int n)
   int loopTime = timer_start - currentTime;
   SDL_Delay(minimumWaitTime - loopTime);
   timer_start = SDL_GetTicks();
+}
+
+void handleEvents(int *array, int n)
+{
+  while (SDL_PollEvent(&event))
+  {
+    switch (event.type) {
+      case SDL_EVENT_QUIT:
+        isRunning = SDL_FALSE;
+        forceSortArray(array, n);
+        break;
+      case SDL_EVENT_KEY_UP:
+        switch (state) {
+          case MAIN_MENU:
+            state = SELECTION;
+            break;
+          case ALGO:
+            forceSortArray(array, n);
+            state = SELECTION;
+            break;
+          case SELECTION:
+            switch (event.key.keysym.sym) {
+              case SDLK_1:
+                algoNumber = 1;
+                shuffleAray(array, n);
+                state = ALGO;
+                break;
+              case SDLK_2:
+                algoNumber = 2;
+                shuffleAray(array, n);
+                state = ALGO;
+                break;
+              case SDLK_3:
+                algoNumber = 3;
+                shuffleAray(array, n);
+                state = ALGO;
+                break;
+              case SDLK_4:
+                algoNumber = 4;
+                shuffleAray(array, n);
+                state = ALGO;
+                break;
+              case SDLK_5:
+                algoNumber = 5;
+                shuffleAray(array, n);
+                state = ALGO;
+                break;
+              default: break;
+            }
+            break;
+        }
+        break;
+    }
+  }
 }
