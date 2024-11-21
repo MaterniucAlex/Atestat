@@ -65,7 +65,7 @@ int main()
         }
         continue;
       }
-    selectedID = -1;
+    setSelectedId(-1);
 
     renderAndWait(array, n);
   }
@@ -154,4 +154,21 @@ void handleEvents(int *array, int n)
         break;
     }
   }
+}
+
+int selectedID = 0;
+
+void setSelectedId(int id)
+{
+  selectedID = id;
+}
+
+int getSelectedId()
+{
+  return selectedID;
+}
+
+int isGameRunning()
+{
+  return isRunning;
 }

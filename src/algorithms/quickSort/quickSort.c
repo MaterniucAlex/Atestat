@@ -14,8 +14,8 @@ int partition(int arr[], int n, int low, int high) {
         }
     }
     // Swap the pivot element with the element at (i+1)
-    selectedID = i + 1;
-    switchArrayItemsAndRender(arr, n, selectedID, high);
+    setSelectedId(i+1);
+    switchArrayItemsAndRender(arr, n, i + 1, high);
     return (i + 1); // return the index of the pivot element
 }
 

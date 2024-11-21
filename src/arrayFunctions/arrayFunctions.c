@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "arrayFunctions.h"
 #include "SDL3/SDL_render.h"
+#include "../Main.h"
 
 void shuffleAray(int *array, int n)
 {
@@ -26,7 +27,7 @@ void renderArray(SDL_Renderer *renderer, int *array, int n)
     itemRect.h = SCREEN_HEIGHT / (n + 1) * array[i];
     itemRect.y = SCREEN_HEIGHT - itemRect.h;
 
-    if (i == selectedID)
+    if (i == getSelectedId())
       SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     else
       SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);

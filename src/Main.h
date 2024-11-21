@@ -9,8 +9,10 @@ static const int FPS = 30;
 static const int msInAsecond = 1000;
 static const int minimumWaitTime = msInAsecond / FPS;
 
-void renderAndWait(int *array, int n);
+void setSelectedId(int id);
+int getSelectedId();
+int isGameRunning();
 
-static int selectedID = 0;
+void renderAndWait(int *array, int n);
 
 #endif // !MAIN

@@ -2,7 +2,6 @@
 #include "../../arrayFunctions/arrayFunctions.h"
 #include "../../Main.h"
 
-static int selectedID;
 void insertionSort(int arr[], int size) {
     for (int i = 1; i < size; i++) {
         int key = arr[i];
@@ -12,13 +11,13 @@ void insertionSort(int arr[], int size) {
         // of their current position
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
-            selectedID = j + 1;
+            setSelectedId(j+1);
             switchArrayItemsAndRender(arr, size, j + 1, j + 1);
             j = j - 1;
         }
 
         arr[j + 1] = key;
-        selectedID = j + 1;
+    setSelectedId(j+1);
         switchArrayItemsAndRender(arr, size, j + 1, j + 1);
     }
 }
