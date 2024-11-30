@@ -11,7 +11,6 @@ int timer_start;
 SDL_Event event;
 SDL_bool isRunning = SDL_TRUE;
 
-SDL_Renderer *renderer;
 SDL_Texture *mainMenu;
 SDL_Texture *algos;
 

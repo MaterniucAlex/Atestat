@@ -1,5 +1,5 @@
 libs  := -lSDL3 -lm -lSDL3_image
-files :=  src/main.c src/arrayFunctions/arrayFunctions.c src/algorithms/**/*.c
+files :=  src/main.cpp src/arrayFunctions/arrayFunctions.cpp src/algorithms/**/*.cpp
 
 all: linux
 
