@@ -3,6 +3,7 @@
 #include "arrayFunctions/arrayFunctions.h"
 #include "algorithms/algorithms.h"
 #include "Main.h"
+#include "stdio.h"
 
 SDL_Renderer *renderer;
 int timer_start;
@@ -11,6 +12,8 @@ SDL_Event event;
 SDL_bool isRunning = SDL_TRUE;
 
 SDL_Renderer *renderer;
+SDL_Texture *mainMenu;
+SDL_Texture *algos;
 
 enum appState {
   ALGO,
@@ -27,7 +30,10 @@ int main()
   IMG_Init(IMG_INIT_PNG);
   SDL_Window *window = SDL_CreateWindow("Algoritmi de sortare - Vizualizator", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
   renderer = SDL_CreateRenderer(window, NULL);
-
+  mainMenu = IMG_LoadTexture(renderer, "assets/MainMenu.png");
+  algos    = IMG_LoadTexture(renderer, "assets/Algo.png");
+  printf("%s\n", SDL_GetError());
+  
   state = MAIN_MENU;
 
   int n = 50;
@@ -70,6 +76,8 @@ int main()
     renderAndWait(array, n);
   }
 
+  SDL_DestroyTexture(mainMenu);
+  SDL_DestroyTexture(algos);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   IMG_Quit();
@@ -82,13 +90,21 @@ void renderAndWait(int *array, int n)
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
   SDL_RenderClear(renderer);
 
+  SDL_FRect screen;
+  screen.x = 0;
+  screen.y = 0;
+  screen.w = SCREEN_WIDTH;
+  screen.h = SCREEN_HEIGHT;
+
   switch (state) {
     case ALGO:
       renderArray(renderer, array, n);
       break;
     case MAIN_MENU:
+      SDL_RenderTexture(renderer, mainMenu, &screen, &screen);
       break;
     case SELECTION:
+      SDL_RenderTexture(renderer, algos, &screen, &screen);
       break;
   
   }
