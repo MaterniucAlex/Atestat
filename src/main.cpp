@@ -136,28 +136,29 @@ void handleEvents(int *array, int n)
             state = SELECTION;
             break;
           case SELECTION:
+            // printf("%d\n", event.key.keysym.sym);
             switch (event.key.keysym.sym) {
-              case SDLK_1:
+              case 131072:
                 algoNumber = 1;
                 shuffleAray(array, n);
                 state = ALGO;
                 break;
-              case SDLK_2:
+              case 196608:
                 algoNumber = 2;
                 shuffleAray(array, n);
                 state = ALGO;
                 break;
-              case SDLK_3:
+              case 262144:
                 algoNumber = 3;
                 shuffleAray(array, n);
                 state = ALGO;
                 break;
-              case SDLK_4:
+              case 327680:
                 algoNumber = 4;
                 shuffleAray(array, n);
                 state = ALGO;
                 break;
-              case SDLK_5:
+              case 393216:
                 algoNumber = 5;
                 shuffleAray(array, n);
                 state = ALGO;
