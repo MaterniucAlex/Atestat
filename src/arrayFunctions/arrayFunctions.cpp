@@ -30,7 +30,7 @@ void renderArray(SDL_Renderer *renderer, int *array, int n)
     if (i == getSelectedId())
       SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     else
-      SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+      SDL_SetRenderDrawColor(renderer, 255 * (itemRect.h / SCREEN_HEIGHT), 0, 0, 255);
     SDL_RenderFillRect(renderer, &itemRect);
   }
 }
