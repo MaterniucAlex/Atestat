@@ -38,6 +38,7 @@ int isMouseInsideButton(Button *button)
 
 void renderButton(SDL_Renderer *renderer, Button *button)
 {
+	if (button->isVisible == 0) return;
 	if (!isMouseInsideButton(button)) return;
 
 	SDL_SetRenderDrawColor(renderer, 200, 200, 200, 100);

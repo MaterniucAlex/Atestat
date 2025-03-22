@@ -79,6 +79,7 @@ int main()
   renderer           = SDL_CreateRenderer(window, NULL);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
+  printf("loading...\n");
   background         = IMG_LoadTexture(renderer, "assets/bg.png");
   mainMenu           = IMG_LoadTexture(renderer, "assets/MainMenu.png");
   algos              = IMG_LoadTexture(renderer, "assets/Algo.png");
@@ -87,6 +88,7 @@ int main()
   bubbleSortExpl     = IMG_LoadTexture(renderer, "assets/bubbleSort.png");
   mergeSortExpl      = IMG_LoadTexture(renderer, "assets/mergeSort.png");
   insertionSortExpl  = IMG_LoadTexture(renderer, "assets/insertionSort.png");
+  printf("loaded\n");
 
   quicksortButton    = createButton(100, 270, 310, 50, changeState);
   simpleSortButton   = createButton(95, 336, 360, 50, changeState);
@@ -108,38 +110,38 @@ int main()
   int array[n];
 
   shuffleAray(array, n);
+  for(int i = 0; i < n; i++)
+    array[i] = n + 1 - i;
 
   timer_start = SDL_GetTicks();
 
   while(isRunning)
   {
-    //keyboard input
     handleEvents(array, n);
 
     //update
     updateMousePosition();
-    if (state == ALGO)
-      if (!isArraySorted(array, n))
-      {
-        switch (algoNumber) {
-          case 1:
-            quicksort(array, n, 0, n-1);
-            break;
-          case 2:
-            simpleSort(array, n);
-            break;
-          case 3:
-            bubbleSort(array, n);
-            break;
-          case 4:
-            mergeSort(array, n, 0, n-1);
-            break;
-          case 5:
-            insertionSort(array, n);
-            break;
-        }
-        continue;
+    if (state == ALGO && !isArraySorted(array, n))
+    {
+      switch (algoNumber) {
+      case 1:
+        quicksort(array, n, 0, n-1);
+        break;
+      case 2:
+        simpleSort(array, n);
+        break;
+      case 3:
+        bubbleSort(array, n);
+        break;
+      case 4:
+        mergeSort(array, n, 0, n-1);
+        break;
+      case 5:
+        insertionSort(array, n);
+        break;
       }
+      continue;
+    }
     setSelectedId(-1);
 
     renderAndWait(array, n);
@@ -174,42 +176,38 @@ void renderAndWait(int *array, int n)
 
   for(int i = 1; i < 6; i++)
     buttonsList[i]->isVisible = 0;
-
+    
   switch (state) {
-    case INSERTIONSORT_EXPL:
-      SDL_RenderTexture(renderer, insertionSortExpl, &screen, &screen);
-      break;
-    case MERGESOT_EXPL:
-      SDL_RenderTexture(renderer, mergeSortExpl, &screen, &screen);
-      break;
-    case BUBBLESORT_EXPL:
-      SDL_RenderTexture(renderer, bubbleSortExpl, &screen, &screen);
-      break;
-    case SIMPLESORT_EXPL:
-      SDL_RenderTexture(renderer, simpleSortExpl, &screen, &screen);
-      break;
-    case QUICKSORT_EXPL:
-      SDL_RenderTexture(renderer, quicksortExpl, &screen, &screen);
-      break;
-    case MAIN_MENU:
-      SDL_RenderTexture(renderer, mainMenu, &screen, &screen);
-      break;
-    case SELECTION:
-      SDL_RenderTexture(renderer, algos, &screen, &screen);
-      buttonsList[1]->isVisible = 1;
-      buttonsList[2]->isVisible = 1;
-      buttonsList[3]->isVisible = 1;
-      buttonsList[4]->isVisible = 1;
-      buttonsList[5]->isVisible = 1;
-      break;
-    case ALGO:
-      renderArray(renderer, array, n);
-      break;
+  case INSERTIONSORT_EXPL:
+    SDL_RenderTexture(renderer, insertionSortExpl, &screen, &screen);
+    break;
+  case MERGESOT_EXPL:
+    SDL_RenderTexture(renderer, mergeSortExpl, &screen, &screen);
+    break;
+  case BUBBLESORT_EXPL:
+    SDL_RenderTexture(renderer, bubbleSortExpl, &screen, &screen);
+    break;
+  case SIMPLESORT_EXPL:
+    SDL_RenderTexture(renderer, simpleSortExpl, &screen, &screen);
+    break;
+  case QUICKSORT_EXPL:
+    SDL_RenderTexture(renderer, quicksortExpl, &screen, &screen);
+    break;
+  case MAIN_MENU:
+    SDL_RenderTexture(renderer, mainMenu, &screen, &screen);
+    break;
+  case SELECTION:
+    SDL_RenderTexture(renderer, algos, &screen, &screen);
+    for(int i = 1; i < 6; i++)
+      buttonsList[i]->isVisible = 1;
+    break;
+  case ALGO:
+    renderArray(renderer, array, n);
+    break;
   }
 
-    for(int i = 1; i < 6; i++)
-      if (buttonsList[i]->isVisible)
-        renderButton(renderer, buttonsList[i]);
+  for(int i = 1; i < 6; i++)
+    renderButton(renderer, buttonsList[i]);
   SDL_RenderPresent(renderer);
 
   //fps controll
