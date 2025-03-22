@@ -1,6 +1,6 @@
 libs  := -lSDL3 -lm -lSDL3_image
-files :=  src/main.cpp src/arrayFunctions/arrayFunctions.cpp src/algorithms/**/*.cpp
-filesW :=  src/main.cpp src/arrayFunctions/arrayFunctions.cpp src/algorithms/bubblesort/bubblesort.cpp src/algorithms/mergesort/mergesort.cpp src/algorithms/quicksort/quicksort.cpp src/algorithms/insertionsort/insertionsort.cpp src/algorithms/simplesort/simplesort.cpp
+files :=  src/main.cpp src/arrayFunctions/arrayFunctions.cpp src/algorithms/**/*.cpp src/button/Button.c
+filesW :=  src/main.cpp src/arrayFunctions/arrayFunctions.cpp src/algorithms/bubblesort/bubblesort.cpp src/algorithms/mergesort/mergesort.cpp src/algorithms/quicksort/quicksort.cpp src/algorithms/insertionsort/insertionsort.cpp src/algorithms/simplesort/simplesort.cpp src/button/Button.cpp
 
 all: linux
 

@@ -1,7 +1,10 @@
 #include "SDL3/SDL.h"
 #include "SDL3_image/SDL_image.h"
+#include "algorithms/quickSort/quickSort.h"
+#include "algorithms/simpleSort/simpleSort.h"
 #include "arrayFunctions/arrayFunctions.h"
 #include "algorithms/algorithms.h"
+#include "button/Button.h"
 #include "Main.h"
 #include "stdio.h"
 
@@ -20,6 +23,13 @@ SDL_Texture *bubbleSortExpl;
 SDL_Texture *mergeSortExpl;
 SDL_Texture *insertionSortExpl;
 
+Button* buttonsList[6];
+Button quicksortButton;
+Button simpleSortButton;
+Button bubbleSortButton;
+Button mergeSortButton;
+Button insertionSortButton;
+
 enum appState {
   ALGO,
   MAIN_MENU,
@@ -34,20 +44,62 @@ int algoNumber;
 
 enum appState state;
 
+void changeState(int stateID)
+{
+  switch (stateID)
+  {
+    case 1:
+      state = QUICKSORT_EXPL;
+      algoNumber = 1;
+      break;
+    case 2:
+      state = SIMPLESORT_EXPL;
+      algoNumber = 2;
+      break;
+    case 3:
+      state = BUBBLESORT_EXPL;
+      algoNumber = 3;
+      break;
+    case 4:
+      state = MERGESOT_EXPL;
+      algoNumber = 4;
+      break;
+    case 5:
+      state = INSERTIONSORT_EXPL;
+      algoNumber = 5;
+      break;
+  }
+}
+
 int main()
 {
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
   SDL_Window *window = SDL_CreateWindow("Algoritmi de sortare - Vizualizator", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-  renderer = SDL_CreateRenderer(window, NULL);
-  background = IMG_LoadTexture(renderer, "assets/bg.png");
-  mainMenu = IMG_LoadTexture(renderer, "assets/MainMenu.png");
-  algos    = IMG_LoadTexture(renderer, "assets/Algo.png");
-  quicksortExpl    = IMG_LoadTexture(renderer, "assets/quickSort.png");
-  simpleSortExpl    = IMG_LoadTexture(renderer, "assets/simpleSort.png");
-  bubbleSortExpl    = IMG_LoadTexture(renderer, "assets/bubbleSort.png");
-  mergeSortExpl    = IMG_LoadTexture(renderer, "assets/mergeSort.png");
-  insertionSortExpl    = IMG_LoadTexture(renderer, "assets/insertionSort.png");
+  renderer           = SDL_CreateRenderer(window, NULL);
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+  background         = IMG_LoadTexture(renderer, "assets/bg.png");
+  mainMenu           = IMG_LoadTexture(renderer, "assets/MainMenu.png");
+  algos              = IMG_LoadTexture(renderer, "assets/Algo.png");
+  quicksortExpl      = IMG_LoadTexture(renderer, "assets/quickSort.png");
+  simpleSortExpl     = IMG_LoadTexture(renderer, "assets/simpleSort.png");
+  bubbleSortExpl     = IMG_LoadTexture(renderer, "assets/bubbleSort.png");
+  mergeSortExpl      = IMG_LoadTexture(renderer, "assets/mergeSort.png");
+  insertionSortExpl  = IMG_LoadTexture(renderer, "assets/insertionSort.png");
+
+  quicksortButton    = createButton(100, 270, 310, 50, changeState);
+  simpleSortButton   = createButton(95, 336, 360, 50, changeState);
+  bubbleSortButton   = createButton(95, 400, 360, 50, changeState);
+  mergeSortButton    = createButton(95, 460, 350, 60, changeState);
+  insertionSortButton= createButton(95, 525, 415, 50, changeState);
+
+  buttonsList[1] = &quicksortButton;
+  buttonsList[2] = &simpleSortButton;
+  buttonsList[3] = &bubbleSortButton;
+  buttonsList[4] = &mergeSortButton;
+  buttonsList[5] = &insertionSortButton;
+
   printf("%s\n", SDL_GetError());
   
   state = MAIN_MENU;
@@ -65,6 +117,7 @@ int main()
     handleEvents(array, n);
 
     //update
+    updateMousePosition();
     if (state == ALGO)
       if (!isArraySorted(array, n))
       {
@@ -119,6 +172,9 @@ void renderAndWait(int *array, int n)
   SDL_RenderClear(renderer);
   SDL_RenderTexture(renderer, background, &screen, &screen);
 
+  for(int i = 1; i < 6; i++)
+    buttonsList[i]->isVisible = 0;
+
   switch (state) {
     case INSERTIONSORT_EXPL:
       SDL_RenderTexture(renderer, insertionSortExpl, &screen, &screen);
@@ -140,13 +196,20 @@ void renderAndWait(int *array, int n)
       break;
     case SELECTION:
       SDL_RenderTexture(renderer, algos, &screen, &screen);
+      buttonsList[1]->isVisible = 1;
+      buttonsList[2]->isVisible = 1;
+      buttonsList[3]->isVisible = 1;
+      buttonsList[4]->isVisible = 1;
+      buttonsList[5]->isVisible = 1;
       break;
     case ALGO:
       renderArray(renderer, array, n);
       break;
-  
   }
 
+    for(int i = 1; i < 6; i++)
+      if (buttonsList[i]->isVisible)
+        renderButton(renderer, buttonsList[i]);
   SDL_RenderPresent(renderer);
 
   //fps controll
@@ -160,65 +223,40 @@ void handleEvents(int *array, int n)
 {
   while (SDL_PollEvent(&event))
   {
-    switch (event.type) {
-      case SDL_EVENT_QUIT:
+    if (event.type == SDL_EVENT_QUIT)
+    {
         isRunning = SDL_FALSE;
         forceSortArray(array, n);
+    }
+    if (event.type == SDL_EVENT_MOUSE_BUTTON_UP)
+    {
+      switch (state) {
+      case MAIN_MENU:
+        state = SELECTION;
         break;
-      case SDL_EVENT_KEY_UP:
-        switch (state) {
-          case MAIN_MENU:
-            state = SELECTION;
+      case ALGO:
+        forceSortArray(array, n);
+        state = SELECTION;
+        break;
+      case SELECTION:
+        for(int i = 1; i < 6; i++)
+        {
+          if (buttonsList[i]->isVisible && isMouseInsideButton(buttonsList[i]))
+          {
+            buttonsList[i]->clickFunction(i);
+            shuffleAray(array, n);
             break;
-          case ALGO:
-            forceSortArray(array, n);
-            state = SELECTION;
-            break;
-          case SELECTION:
-            // printf("%d\n", event.key.keysym.sym);
-            switch (event.key.keysym.sym) {
-              case SDLK_1:
-              case 131072:
-                algoNumber = 1;
-                shuffleAray(array, n);
-                state = QUICKSORT_EXPL;
-                break;
-              case SDLK_2:
-              case 196608:
-                algoNumber = 2;
-                shuffleAray(array, n);
-                state = SIMPLESORT_EXPL;
-                break;
-              case SDLK_3:
-              case 262144:
-                algoNumber = 3;
-                shuffleAray(array, n);
-                state = BUBBLESORT_EXPL;
-                break;
-              case SDLK_4:
-              case 327680:
-                algoNumber = 4;
-                shuffleAray(array, n);
-                state = MERGESOT_EXPL;
-                break;
-              case SDLK_5:
-              case 393216:
-                algoNumber = 5;
-                shuffleAray(array, n);
-                state = INSERTIONSORT_EXPL;
-                break;
-              default: break;
-            }
-            break;
-          case QUICKSORT_EXPL:
-          case SIMPLESORT_EXPL:
-          case BUBBLESORT_EXPL:
-          case MERGESOT_EXPL:
-          case INSERTIONSORT_EXPL:
-            state = ALGO;
-            break;
+          }
         }
         break;
+      case QUICKSORT_EXPL:
+      case SIMPLESORT_EXPL:
+      case BUBBLESORT_EXPL:
+      case MERGESOT_EXPL:
+      case INSERTIONSORT_EXPL:
+        state = ALGO;
+        break;
+      }
     }
   }
 }
